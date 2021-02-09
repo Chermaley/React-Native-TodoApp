@@ -1,19 +1,20 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Image, Dimensions } from 'react-native';
-import { TodoType } from '../../App';
 import { AddTodo } from '../components/AddTodo';
 import { TodoItem } from '../components/TodoItem';
+import { ScreenCntx } from '../context/screen/screenContext';
+import { TodoContext } from '../context/Todo/todoContext';
 import { THEME } from '../theme';
 
-type MainScreenPropTypes = {
-    addTodo: (title: string) => void,
-    removeTodo: (id: string) => void,
-    openTodo: (id: string) => void,
-    todos: TodoType[]
-}
+export const MainScreen: React.FC = () => {
+    const [deviceWidth, setDeviceWidth] = React.useState<number>(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2);
+    const screenContext = React.useContext(ScreenCntx);
+    const todosContext = React.useContext(TodoContext);
 
-export const MainScreen: React.FC<MainScreenPropTypes> = ({addTodo, todos, removeTodo, openTodo}) => {
-    const [deviceWidth, setDeviceWidth] = React.useState<number>(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2)
+    if (!todosContext || !screenContext) return null
+
+    const {changeScreen} = screenContext;
+    const {state: {todos}, addTodo, removeTodo} = todosContext;
 
     React.useEffect(() => {
         const update = () => {
@@ -30,7 +31,7 @@ export const MainScreen: React.FC<MainScreenPropTypes> = ({addTodo, todos, remov
         <View style={{width: deviceWidth}}>
              <FlatList data={todos}
                        keyExtractor={(item) => item.id}
-                       renderItem={({item}) =>  <TodoItem setTodoId={openTodo} onLongPress={removeTodo} item={item}/>} />
+                       renderItem={({item}) =>  <TodoItem setTodoId={changeScreen} onLongPress={removeTodo} item={item}/>} />
         </View>
     )
     

@@ -1,27 +1,34 @@
 import React from 'react';
 import { View, StyleSheet, Alert, Dimensions } from 'react-native';
 import {FontAwesome, AntDesign} from '@expo/vector-icons';
-import { TodoType } from '../../App';
 import { EditModal } from '../components/EditModal';
 import { AppButton } from '../components/ui/AppButton';
 import { AppCard } from '../components/ui/AppCard';
 import { AppTextBold } from '../components/ui/AppTextBold';
 import { THEME } from '../theme';
+import { ScreenCntx } from '../context/screen/screenContext';
+import { TodoContext } from '../context/Todo/todoContext';
 
-type TodoScreenPropTypes = {
-    todo: TodoType,
-    goBack: () => void,
-    onRemove: (id: string) => void,
-    onChangeTitle: (id: string, title: string) => void
-}
 
-export const TodoScreen: React.FC<TodoScreenPropTypes> = ({todo, goBack, onRemove, onChangeTitle}) => {
+export const TodoScreen: React.FC = () => {
     const [modal, setModal] = React.useState(false);
     
+    const screenContext = React.useContext(ScreenCntx);
+    const todosContext = React.useContext(TodoContext);
+
+    if (!todosContext || !screenContext) return null
+
+    const {state: screen, changeScreen} = screenContext;
+    const {changeTodoTitle, removeTodo, state: {todos}} = todosContext;
+
+    const todo = todos.find(t => t.id === screen.screen);
+ 
+    if (!todo) return null
+
     const onChangeHandler = (title: string) => {        
         if (title.trim().length > 3) {
             setModal(false);
-            onChangeTitle(todo.id, title);
+            changeTodoTitle(todo.id, title);
         } else {
             Alert.alert(
                 'Please type a new title'
@@ -45,12 +52,12 @@ export const TodoScreen: React.FC<TodoScreenPropTypes> = ({todo, goBack, onRemov
 
             <View style={styles.buttons}>
                 <View style={styles.button}>
-                    <AppButton onPress={goBack} color={THEME.GREY_COLOR}>
+                    <AppButton onPress={() => changeScreen(null)} color={THEME.GREY_COLOR}>
                         <AntDesign name="back" color="#fff" size={20}/>
                     </AppButton>
                 </View>
                 <View style={styles.button}>
-                    <AppButton onPress={() => onRemove(todo.id)} color={THEME.DANGER_COLOR}>
+                    <AppButton onPress={() => removeTodo(todo.id)} color={THEME.DANGER_COLOR}>
                         <FontAwesome name="remove" size={20}/>
                     </AppButton>
                 </View>

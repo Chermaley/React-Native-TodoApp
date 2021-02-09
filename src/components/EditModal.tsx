@@ -17,6 +17,11 @@ export const EditModal: React.FC<EditModalPropTypes> = ({visible, onClose, value
         onConfirm(title)
     }
 
+    const cancelHandler = () => {
+        setTitle(value);
+        onClose();
+    }
+
     return (
         <Modal animationType="slide" visible={visible}>
             <View style={styles.wrap}>
@@ -27,7 +32,7 @@ export const EditModal: React.FC<EditModalPropTypes> = ({visible, onClose, value
                     <AppButton color={THEME.GREY_COLOR} onPress={ConfirmHandler}>
                         CONFIRM
                     </AppButton>
-                    <AppButton color={THEME.DANGER_COLOR} onPress={onClose}>
+                    <AppButton color={THEME.DANGER_COLOR} onPress={cancelHandler}>
                         CANCEL
                     </AppButton>
                 </View>
