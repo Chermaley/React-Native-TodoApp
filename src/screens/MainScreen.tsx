@@ -14,7 +14,13 @@ export const MainScreen: React.FC = () => {
     if (!todosContext || !screenContext) return null
 
     const {changeScreen} = screenContext;
-    const {state: {todos}, addTodo, removeTodo} = todosContext;
+    const {state: {todos}, addTodo, removeTodo, fetchTodos} = todosContext;
+
+    const loadTodos = React.useCallback(async () => await fetchTodos(), [fetchTodos])
+
+    React.useEffect(() => {
+        loadTodos();
+    }, [])
 
     React.useEffect(() => {
         const update = () => {
