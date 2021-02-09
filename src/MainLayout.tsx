@@ -20,7 +20,7 @@ export const MainLayout: React.FC = () => {
     const {state: {screen}} = screenContext;
 
     return (
-    <View >
+    <View style={styles.wrapper}>
       <Navbar title={"Todo"}/>
       <View style={styles.container}>
         {screen ? <TodoScreen /> : <MainScreen/>}
@@ -32,6 +32,10 @@ export const MainLayout: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
       paddingHorizontal: THEME.PADDING_HORIZONTAL,
-      paddingVertical: 20
+      paddingVertical: 20,
+      flex: 1
     },
+    wrapper: {
+      flex: 1
+    }
   });

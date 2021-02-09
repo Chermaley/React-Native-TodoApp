@@ -61,14 +61,17 @@ export const TodoState: React.FC = ({children}) => {
     };
     
     const fetchTodos = async () => {
+        showLoader(true);
         const response = await fetch('https://rn-todo-app-13fc9-default-rtdb.europe-west1.firebasedatabase.app/todos.json', {
             method: "GET",
             headers: {'Content-Type': 'application/json'}
         });
         const data = await response.json();
-        console.log(data);
+
         const todos: TodoType[] = Object.keys(data).map(key => ({...data[key], id: key}))
         dispatch(actions.fetchTodos(todos));
+        
+        showLoader(false);
     }
 
     const changeTodoTitle = (id: string | null, title: string) => dispatch(actions.changeTitle({id, title}));
