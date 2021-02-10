@@ -25,10 +25,10 @@ export const TodoScreen: React.FC = () => {
  
     if (!todo) return null
 
-    const onChangeHandler = (title: string) => {        
+    const onChangeHandler = async (title: string) => {        
         if (title.trim().length > 3) {
+            await changeTodoTitle(todo.id, title);
             setModal(false);
-            changeTodoTitle(todo.id, title);
         } else {
             Alert.alert(
                 'Please type a new title'

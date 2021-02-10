@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import { TodoType } from '../../App';
+import { TodoType } from '../MainLayout';
 import { AppText } from './ui/AppText';
 
 
@@ -9,7 +9,9 @@ type TodoItemPropTypes = {
     onLongPress: (id: string) => void,
     setTodoId: (id: string) => void
 }
+
 export const TodoItem: React.FC<TodoItemPropTypes> = ({item, onLongPress, setTodoId}) => {
+    
     return (
         <TouchableOpacity activeOpacity={0.5} 
                           onLongPress={() => onLongPress(item.id)}
